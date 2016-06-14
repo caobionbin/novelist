@@ -1,0 +1,14 @@
+<p>你在找: <strong>{{ bookname }}</strong></p>
+
+{% if results %}
+    <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->
+    <ul>
+        {% for r in results %}
+            <a href="{{ r.1 }}">{{ r.0 }}</a> <span>来自</span> <a href="{{ r.2 }}">该网站</a>
+            <br>
+            <br>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>抱歉,没搜到你想要的小说...</p>
+{% endif %}
