@@ -6,6 +6,8 @@ import requests
 
 DINGDIAN = 'http://www.23wx.com/'
 WU200 = 'http://www.5200xs.org/'
+HUNHUN = 'http://www.hunhun520.com/'
+JJZW = 'http://www.99zw.cn/'
 WU200_SEARCH = 'http://www.5200xs.org/search.php'
 SOURCE_WEBSITE = [DINGDIAN, WU200, 'xxx']
 
@@ -62,4 +64,4 @@ def findbook(bookname):
     return find_list
 
 
-findbook('妖艳花丛')
+findbook('xxx')
