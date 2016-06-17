@@ -17,3 +17,5 @@ def search(request):
         return render_to_response('novel/search_result.html', {'bookname': bookname, 'results': results})
     else:
         return HttpResponse('输入你想要搜的书名...')
+
+def read(request, url):
