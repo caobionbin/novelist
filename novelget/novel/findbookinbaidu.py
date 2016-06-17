@@ -13,8 +13,11 @@ def findbookinbaidu(bookname):
     s.keep_alive = False
     pn = -10
     result = []
-    while not result:
-        pn += 10
+    times = 5
+    while not result and times:
+        times -= 1
+        if result:
+            pn += 10
         try:
             params = {'ie': 'utf-8', 'pn': pn, 'wd': bookname + 'site:qidian.com'}
             res = s.get(baidu_url, params=params, headers=header)
@@ -42,5 +45,4 @@ def getbook(url):
     '''
     pass
 
-findbookinbaidu('斗罗大陆')
 

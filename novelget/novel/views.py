@@ -19,3 +19,4 @@ def search(request):
         return HttpResponse('输入你想要搜的书名...')
 
 def read(request, url):
+    pass
