@@ -9,8 +9,6 @@ def findbookinbaidu(bookname):
 
     header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:46.0) Gecko/20100101 Firefox/46.0'}
 
-    s = requests.session()
-    s.keep_alive = False
     pn = -10
     result = []
     times = 5
@@ -19,8 +17,8 @@ def findbookinbaidu(bookname):
         if result:
             pn += 10
         try:
-            params = {'ie': 'utf-8', 'pn': pn, 'wd': bookname + 'site:qidian.com'}
-            res = s.get(baidu_url, params=params, headers=header)
+            params = {'ie': 'utf-8', 'pn': pn, 'wd': bookname + 'site:23wx.com'}
+            res = requests.get(baidu_url, params=params, headers=header)
         except Exception as e:
             print(e, "failed to find %s in baidu ..." % bookname)
             continue
