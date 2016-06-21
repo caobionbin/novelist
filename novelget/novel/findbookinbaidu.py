@@ -150,6 +150,6 @@ def downloadbook(booknumber):
         # print(text)
         yield title +'\n' + text
         # break
-f = open('xxx.txt', 'w')
-for content in downloadbook('28966'):
-    f.write(content+'\n')
+# f = open('xxx.txt', 'w')
+# for content in downloadbook('28966'):
+#     f.write(content+'\n')
