@@ -1,3 +1,7 @@
+import os
+import os.path
+
+
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, StreamingHttpResponse
 
@@ -35,3 +39,13 @@ def download(request, booknumber):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
+
+
+def list(request):
+
+    path = '/Users/zhangdesheng/Documents/python-learning/zds-git/novelist/novelget/novel/templates/novel'
+    files = []
+    for f in os.listdir(path):
+        if os.path.isfile(os.path.join(path, f)):
+            files.append(f)
+    return render_to_response('novel/listfile.html', {'files': files})

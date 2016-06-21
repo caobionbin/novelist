@@ -1,0 +1,25 @@
+{% extends 'novel/base.html' %}
+
+{% block search %}
+<div class="row">
+    <center><h2>广发基金vat系统报表</h2></center>
+</div>
+<div class="row">
+    <center><h2>&nbsp;</h2></center>
+</div>
+<div class="row">
+    <center><h2>&nbsp;</h2></center>
+</div>
+</div>
+{% for f in files %}
+<div class="row">
+    <center>
+    <div class="col-md-4">&nbsp;</div>
+    <div class="col-md-4">
+        <a href="#">{{ f }}</a>
+    </div>
+    <div class="col-md-4">&nbsp;</div>
+    </center>
+</div>
+{% endfor %}
+{% endblock %}

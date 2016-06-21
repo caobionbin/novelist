@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^search/', 'novel.views.search', name='search'),
     url('^read/(\d+)', 'novel.views.read', name='read'),
     url('^download/(\d+)', 'novel.views.download', name='download'),
+    url(r'^list/', 'novel.views.list', name='list'),
 ]
