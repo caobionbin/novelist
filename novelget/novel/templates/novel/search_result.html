@@ -11,8 +11,7 @@
                 <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->
                 <ul>
                     {% for r in results %}
-                        <a href="{{ r.1 }}">{{ r.0 }}</a><li>尝试阅读</li>
-                    <a href="#"></a>
+                        <a href="{{ r.1 }}">{{ r.0 }}</a><li>尝试阅读<a href="{% url 'download' r.2 %}">点击下载</a></li>
                         <br>
                         <br>
                     {% endfor %}

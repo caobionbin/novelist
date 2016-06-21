@@ -20,6 +20,8 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'novel.views.index'),
-    url(r'^search/', 'novel.views.search'),
+    url(r'^$', 'novel.views.index', name='index'),
+    url(r'^search/', 'novel.views.search', name='search'),
+    url('^read/(\d+)', 'novel.views.read', name='read'),
+    url('^download/(\d+)', 'novel.views.download', name='download'),
 ]
