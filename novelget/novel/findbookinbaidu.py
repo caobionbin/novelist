@@ -35,7 +35,7 @@ def findbookinbaidu(bookname):
             print('error in search %s' % bookname)
             continue
 
-        soup = BeautifulSoup(res.content.decode('utf8'), "lxml")
+        soup = BeautifulSoup(res.content.decode('utf8'), "html.parser")
         for h3 in soup.find_all('h3'):
             # print(h3)
             print(h3.text, h3.a['href'])
@@ -115,7 +115,7 @@ def downloadbook(booknumber):
     except Exception as e:
         print(e)
 
-    soup = BeautifulSoup(res.content.decode('gbk', 'ignore'), "lxml")
+    soup = BeautifulSoup(res.content.decode('gbk', 'ignore'), "html.parser")
     all_chapter_links = []
     try:
         string = 'soup.' + cf['hchuag']['chapter_list']
@@ -131,7 +131,7 @@ def downloadbook(booknumber):
             # print(chapter_url)
             content = requests.get(prefix+u['href'], headers=header).content.decode('gbk', 'ignore')
             content = re.sub('<br />','\n', content)
-            contentsoup = BeautifulSoup(content, "lxml")
+            contentsoup = BeautifulSoup(content, "html.parser")
         except Exception as e:
             print(e)
             print('fetch %d chapter error...' % i)
