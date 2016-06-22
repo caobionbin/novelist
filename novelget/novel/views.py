@@ -34,7 +34,7 @@ def read(request, booknumber):
 
 def download(request, booknumber):
 
-    file_name = 'xx.txt'
+    file_name = '%s.txt' % booknumber
     response = StreamingHttpResponse(downloadbook(booknumber))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
