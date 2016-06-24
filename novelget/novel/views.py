@@ -5,7 +5,7 @@ import os.path
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, StreamingHttpResponse
 
-# from .findbook import findbook
+from novelget.novel.models import SearchHistory
 from .findbookinbaidu import findbook, getbook, downloadbook
 # Create your views here.
 
@@ -18,6 +18,12 @@ def search(request):
 
     if 'bookname' in request.GET and request.GET['bookname']:
         bookname = request.GET['bookname']
+        if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+            ip = request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = request.META['REMOTE_ADDR']
+        searchhistory = SearchHistory(bookname=bookname, ip=ip)
+        searchhistory.save()
         results = findbook(bookname)
         # results = findbookinbaidu(bookname)
         return render_to_response('novel/search_result.html', {'bookname': bookname, 'results': results})
