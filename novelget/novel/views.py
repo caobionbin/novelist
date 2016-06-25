@@ -7,7 +7,7 @@ import os.path
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, StreamingHttpResponse
 
-from novelget.novel.models import SearchHistory
+from .models import SearchHistory
 from .findbookinbaidu import findbook, getbook, downloadbook
 # Create your views here.
 
@@ -20,7 +20,7 @@ def search(request):
 
     if 'bookname' in request.GET and request.GET['bookname']:
         bookname = request.GET['bookname']
-        if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
             ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
             ip = request.META['REMOTE_ADDR']
