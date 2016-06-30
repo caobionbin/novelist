@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import re, time
 from urllib.parse import quote, unquote
 
 from bs4 import BeautifulSoup
@@ -66,4 +67,67 @@ def findbook(bookname):
     return find_list
 
 
-findbook('xxx')
+def nujiangzhizhan():
+
+    url = 'http://www.kanunu8.com/files/terrorist/201102/1741.html'
+
+    html = requests.get(url, headers=HEADER).content.decode('gbk', 'ignore')
+    soup = BeautifulSoup(html, "lxml")
+    for a in soup.find_all('a'):
+        if re.findall('(17(\d+)/(\d+))', str(a)):
+            # print(a['href'])
+            u = 'http://www.kanunu8.com/files/terrorist/201102/' + a['href']
+            # print(u)
+            h = requests.get(u, headers=HEADER).content.decode('gbk', 'ignore')
+            s = BeautifulSoup(h, "lxml")
+            title = s.title.text
+            content = s.find(name='td', attrs={'width': '820'}).text
+            print(title)
+            print(content)
+
+
+def guanlufengliu():
+    fw = open('guanlufengliu.txt', 'w')
+    url = 'http://www.guanlufengliu.com/'
+    html = requests.get(url, headers=HEADER).content.decode('utf8', 'ignore')
+    soup = BeautifulSoup(html, "lxml")
+    # print(soup)
+    for a in soup.find_all('a'):
+        if re.findall('wangluoban/(\d+)', str(a)):
+            # print(a)
+            if not a['href'].startswith('http'):
+                u = 'http://www.guanlufengliu.com' + a['href']
+            else:
+                u = a['href']
+            print(u)
+            getsite = requests.get(u, headers=HEADER)
+            print(getsite.status_code)
+            while getsite.status_code != 200:
+                getsite = requests.get(u, headers=HEADER)
+            h = getsite.content.decode('utf8', 'ignore')
+            s = BeautifulSoup(h, "html.parser")
+            title = s.title.text.split('-')[0]
+            # print(h)
+            if not s:
+                content = '没有抓取到 %s ' % u
+            else:
+                try:
+                    content = s.find(name='div', attrs={'class': 'span9'}).text
+                except Exception as e:
+                    content = s.find(name='div', attrs={'class': 'span12'}).text
+                    print(e)
+                except:
+                    content = '没有抓取到 %s ' % u
+                string = "(adsbygoogle = window.adsbygoogle || []).push({});"
+                if string in content:
+                    content = content.split(string)[1]
+                else:
+                    pass
+                # print(content)
+            # break
+            fw.write(title+'\n')
+            fw.write(content+'\n')
+            time.sleep(0.5)
+
+
+guanlufengliu()
