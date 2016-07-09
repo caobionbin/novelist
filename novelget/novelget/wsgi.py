@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 import os
 import sys
 
-path = '/home/zhangdesheng/django-web/novelist/novelget'
+path = '/home/zhangdesheng/django/novelist/novelget'
 if path not in sys.path:
     sys.path.append(path)
 
