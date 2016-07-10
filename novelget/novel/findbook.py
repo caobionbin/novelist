@@ -130,4 +130,25 @@ def guanlufengliu():
             time.sleep(0.5)
 
 
-guanlufengliu()
+def guandaozhisejie():
+    url = 'http://www.kanunu8.com/book3/6967/'
+    f = open('guandaozhishejie', 'w')
+    html = requests.get(url, headers=HEADER).content.decode('gbk', 'ignore')
+    soup = BeautifulSoup(html, "lxml")
+    for a in soup.find_all('a'):
+        if re.findall('(13[56](\d+).html)', str(a)):
+            # print(a['href'])
+            u = 'http://www.kanunu8.com/book3/6967/' + a['href']
+            # print(u)
+            h = requests.get(u, headers=HEADER).content.decode('gbk', 'ignore')
+            s = BeautifulSoup(h, "lxml")
+            title = s.title.text
+            content = s.find(name='td', attrs={'width': '820'}).text
+            # print(title)
+            # print(content)
+            f.write(title+'\n')
+            f.write(content + '\n')
+
+
+if __name__ == '__main__':
+    guandaozhisejie()

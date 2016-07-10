@@ -86,7 +86,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-CN'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -99,5 +99,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+# 这两个设置必须是static_root在前面, 否则找不到..
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# STATIC_ROOT = '/Users/zhangdesheng/Documents/python-learning/zds-git/novelist/novelget/static'
 STATIC_URL = '/static/'

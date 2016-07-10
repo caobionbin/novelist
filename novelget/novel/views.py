@@ -4,7 +4,7 @@ import os
 import os.path
 
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, StreamingHttpResponse
 
 from .models import SearchHistory
@@ -13,7 +13,8 @@ from .findbookinbaidu import findbook, getbook, downloadbook
 
 
 def index(request):
-    return render_to_response('novel/search.html')
+    # return render_to_response('novel/search.html')
+    return redirect('http://www.xs111.com/')
 
 
 def search(request):
