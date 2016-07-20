@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'novel',
+    'django_markdown2',
 )
 
 MIDDLEWARE_CLASSES = (
