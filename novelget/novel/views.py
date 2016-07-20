@@ -48,6 +48,7 @@ def search(request):
                 book_tag = '暂无标签'
         except Book.DoesNotExist:
             print('cannot find local book, fetch from website')
+            novelurl = 0
             for id in Get_ID():
                 novelurl = Search_By_ID(novelname=bookname, id=id)
                 if novelurl == -1 or novelurl == -2:
