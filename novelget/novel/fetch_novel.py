@@ -30,8 +30,6 @@ def Get_ID():
         ID.append(item)
     return ID
 
-if __name__ == '__main__':
-    print(Get_ID())
 
 def Search_By_ID(novelname, id='bqg5200'):
     '''获取小说信息（目录）页
@@ -156,10 +154,6 @@ def Get_Novel_Info(url, id='bqg5200'):
     # pickle.dump(novel_list, open(filename, "wb"))
 
     return noveldata
-if __name__ == '__main__':
-    url = 'http://www.bqg5200.com/xiaoshuo/0/62/'
-    novel_data = Get_Novel_Info(url, 'bqg5200')
-    print(novel_data)
 
 
 def Save_Content(noveldata):
@@ -206,8 +200,6 @@ def Save_Content(noveldata):
     #     fo.write(text.encode('utf8'))
     #     fo.close()
     return chapters
-if __name__ == '__main__':
-    Save_Content(noveldata=novel_data)
 
 
 # def Get_New_Chapter_List(noveldata):

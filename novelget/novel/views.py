@@ -47,7 +47,7 @@ def search(request):
             except:
                 book_tag = '暂无标签'
         except Book.DoesNotExist:
-            print('本地数据库没找到书籍信息,从web找')
+            print('cannot find local book, fetch from website')
             for id in Get_ID():
                 novelurl = Search_By_ID(novelname=bookname, id=id)
                 if novelurl == -1 or novelurl == -2:
@@ -61,7 +61,7 @@ def search(request):
                 return render_to_response('novel/search_result.html', context=mycontext,
                                           context_instance=RequestContext(request))
 
-            print('小说地址%s' % novelurl)
+            print('website: %s' % novelurl)
             for key, value in noveldata.items():
                 print(key+':'+value)
             booktype = None
@@ -90,7 +90,7 @@ def search(request):
                 book.save()
                 book_id = book.book_id
             except Exception as e:
-                print('保存书籍信息失败... %s ' % e)
+                print('save book info error: %s ' % e)
         # print(book_url)
         mycontext.update({'bookname': bookname})
         mycontext.update({'book_author': book_author})
@@ -127,7 +127,7 @@ def book_index(request, book_id):
         chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
         return render_to_response('novel/book_index.html', {'book': book, 'chapters': chapters})
     except Book.DoesNotExist:
-        print('书本不存在')
+        print('book does not exist')
         return redirect('/')
     # except Exception as e:
     #     print(e)
@@ -163,7 +163,7 @@ def chapter(request, book_id, chapter_num):
     except Book.DoesNotExist:
         return redirect('/')
     except:
-        mycontext.update({'error': '获取正文失败, 刷新重试..'})
+        mycontext.update({'error': 'fetch content error, please reclick..'})
         return redirect('/book/%s' % book_id)
     # except Exception as e:
     #     print(e)
