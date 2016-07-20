@@ -26,7 +26,8 @@
 
     <div class="pull-right">
         <ul class="nav nav-pills">
-          <li class="dropdown">
+            <li><a href="{% url 'download' book.book_id %}">txt下载</a></li>
+          <li class="dropdown" hidden>
             <a class="dropdown-toggle" aria-expanded="false" style="cursor:pointer" data-toggle="dropdown">
               功能 <span class="caret"></span>
             </a>

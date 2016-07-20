@@ -6,10 +6,11 @@ import os.path
 
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, StreamingHttpResponse
+from django.utils.http import urlquote
 from django.template import RequestContext
 
 from .models import SearchHistory, BookType, Book, BookChapter
-from .findbookinbaidu import findbook, getbook, downloadbook
+from .findbookinbaidu import findbook, getbook
 from .fetch_novel import Search_By_ID, Get_Novel_Info, Save_Content, Get_ID, get_chapter_content, escape
 # Create your views here.
 
@@ -56,7 +57,7 @@ def search(request):
                 noveldata = Get_Novel_Info(novelurl, id)
                 if noveldata.get('title', '') == bookname:
                     break
-
+            print(novelurl)
             if novelurl == -1 or novelurl == -2:
                 mycontext['nobook'] = False
                 return render_to_response('novel/search_result.html', context=mycontext,
@@ -181,12 +182,21 @@ def read(request, booknumber):
     return render_to_response('novel/read_index.html', {'chapter_list': chapter_list})
 
 
-def download(request, booknumber):
+def download(request, book_id):
 
-    file_name = '%s.txt' % booknumber
-    response = StreamingHttpResponse(downloadbook(booknumber))
+    book = Book.objects.get(pk=book_id)
+    file_name = book.book_name + '.txt'
+    print(file_name)
+    def downloadbook():
+        chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
+        for chapter in chapters:
+            title = chapter.chapter_name
+            content = get_chapter_content(chapter_url=chapter.chapter_url, book_website=book.book_website)
+            yield title + '\n' + content
+
+    response = StreamingHttpResponse(downloadbook())
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(urlquote(file_name))
     return response
 
 
