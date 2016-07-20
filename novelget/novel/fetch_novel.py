@@ -6,7 +6,7 @@ import os
 from os import (path, makedirs, listdir)
 from urllib import (request, parse)
 import requests
-from flask import jsonify
+# from flask import jsonify
 from bs4 import BeautifulSoup
 
 DIRDICT = {'novellist': './novel/list.dat', \
@@ -210,54 +210,54 @@ if __name__ == '__main__':
     Save_Content(noveldata=novel_data)
 
 
-def Get_New_Chapter_List(noveldata):
-    '''从预定网页更新章节列表
-    noveldata：小说信息字典'''
-    update_noveldata = {}
-    chapter_name = []
-    chapter_link = []
-    update_chapter_name = []
-    rt = []
-    t = {}
-
-    if 'content_link' in noveldata:
-        url = noveldata['content_link']
-    else:
-        url = noveldata['infolink']
-    update_noveldata = Get_Novel_Info(url, noveldata['id'])
-    if update_noveldata == -1:
-        return '-1'
-    if update_noveldata['latest'] == noveldata['latest']:
-        return '0'
-
-    opts = CONFIG[noveldata['id']]
-    chapter_name = pickle.load(open(DIRDICT['chapter_name'](noveldata['title']), "rb"))
-    try:
-        data = request.urlopen(url).read()  # 读取目录页面内容
-    except:
-        return '-1'  # 目录页面无法连接
-    soup = BeautifulSoup(data, "html.parser")  # 构建BS数据
-    # --------------------------------------------------抓取小说章节列表
-    string = 'soup.' + opts['chapter_list']
-    for chapter_list in eval(string):
-        string = eval(opts['chapter_name'])
-        string = str(string)
-        update_chapter_name.append(string)
-        url = eval(opts['chapter_link'])
-        if not url.startswith('http'):
-            url = opts['url'] + eval(opts['chapter_link'])
-        chapter_link.append(url)
-    for chapter in update_chapter_name:
-        if not chapter in chapter_name:
-            rt.append({"index": update_chapter_name.index(chapter), "name": chapter})
-    if 'lastread' in noveldata:
-        update_noveldata['lastread'] = noveldata['lastread']
-    pickle.dump(update_noveldata, open(DIRDICT['noveldata'](noveldata['title']), "wb"))
-    # --------------------------------------------------写入小说目录
-    pickle.dump(update_chapter_name, open(DIRDICT['chapter_name'](noveldata['title']), "wb"))
-    pickle.dump(chapter_link, open(DIRDICT['chapter_link'](noveldata['title']), "wb"))
-    # t['list'] = rt
-    return jsonify({'list': rt})
+# def Get_New_Chapter_List(noveldata):
+#     '''从预定网页更新章节列表
+#     noveldata：小说信息字典'''
+#     update_noveldata = {}
+#     chapter_name = []
+#     chapter_link = []
+#     update_chapter_name = []
+#     rt = []
+#     t = {}
+#
+#     if 'content_link' in noveldata:
+#         url = noveldata['content_link']
+#     else:
+#         url = noveldata['infolink']
+#     update_noveldata = Get_Novel_Info(url, noveldata['id'])
+#     if update_noveldata == -1:
+#         return '-1'
+#     if update_noveldata['latest'] == noveldata['latest']:
+#         return '0'
+#
+#     opts = CONFIG[noveldata['id']]
+#     chapter_name = pickle.load(open(DIRDICT['chapter_name'](noveldata['title']), "rb"))
+#     try:
+#         data = request.urlopen(url).read()  # 读取目录页面内容
+#     except:
+#         return '-1'  # 目录页面无法连接
+#     soup = BeautifulSoup(data, "html.parser")  # 构建BS数据
+#     # --------------------------------------------------抓取小说章节列表
+#     string = 'soup.' + opts['chapter_list']
+#     for chapter_list in eval(string):
+#         string = eval(opts['chapter_name'])
+#         string = str(string)
+#         update_chapter_name.append(string)
+#         url = eval(opts['chapter_link'])
+#         if not url.startswith('http'):
+#             url = opts['url'] + eval(opts['chapter_link'])
+#         chapter_link.append(url)
+#     for chapter in update_chapter_name:
+#         if not chapter in chapter_name:
+#             rt.append({"index": update_chapter_name.index(chapter), "name": chapter})
+#     if 'lastread' in noveldata:
+#         update_noveldata['lastread'] = noveldata['lastread']
+#     pickle.dump(update_noveldata, open(DIRDICT['noveldata'](noveldata['title']), "wb"))
+#     # --------------------------------------------------写入小说目录
+#     pickle.dump(update_chapter_name, open(DIRDICT['chapter_name'](noveldata['title']), "wb"))
+#     pickle.dump(chapter_link, open(DIRDICT['chapter_link'](noveldata['title']), "wb"))
+#     # t['list'] = rt
+#     return jsonify({'list': rt})
 
 
 def escape(txt, space=1):
