@@ -63,8 +63,8 @@ def search(request):
                                           context_instance=RequestContext(request))
 
             print('website: %s' % novelurl)
-            for key, value in noveldata.items():
-                print(key+':'+value)
+            # for key, value in noveldata.items():
+            #     print(key+':'+value)
             booktype = None
             if 'category' in noveldata.keys():
                 try:
@@ -157,7 +157,7 @@ def chapter(request, book_id, chapter_num):
         mycontext.update({'chapter_name': chapter_name})
         mycontext.update({'chapter_content': content})
         if int(chapter_num) > 0:
-            mycontext.update({'previous_chapter_num': int(chapter_num)-1})
+            mycontext.update({'previous_chapter_num': str(int(chapter_num)-1)})
         if int(chapter_num) < chapter_count - 1:
             mycontext.update({'next_chapter_num': int(chapter_num) + 1})
 

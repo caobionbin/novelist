@@ -1,11 +1,22 @@
 {% extends "novel/base.html" %}
 {% block index %}
-    <div class="container" id="resText">
-        <ul class="breadcrumb">
-          <li><a href="{% url 'book_index' book_id %}">{{ book_name }}</a></li>
-          <li class="active">{{ chapter_name }}</li>
-        </ul>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">去哪儿找小说</a>
+      </div>
 
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="{% url 'book_index' book_id %}">{{ book_name }}<span class="glyphicon glyphicon-book"></span></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" hidden>
+          <li><a href="/config"><span class="glyphicon glyphicon-cog"></span></a></li>
+        </ul>
+      </div>
+      </div>
+    </nav>
+    <div class="container" id="resText">
         <div class="well well-lg center-block" id="text">
           <h2 align="center">{{ chapter_name }}</h2>
           <p><br /><br />{% load md2 %}{{ chapter_content|markdown }}</p>
@@ -14,7 +25,7 @@
           <li class="previous">
           <a href="{% url 'chapter' book_id previous_chapter_num %}">&larr; 上一章</a></li>
           {% endif %}
-          <li class="previous"><a href="{% url 'book_index' book_id %}">目录</a></li>
+
           {% if next_chapter_num %}
             <li class="next"><a href="{% url 'chapter' book_id next_chapter_num %}">下一章 &rarr;</a></li>
           {% endif %}
