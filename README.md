@@ -10,7 +10,7 @@ www.xs111.com
 
 目前已经支持了在线下载功能，但是速度比较慢，
 
-访问 http://www.novel.freelycode.com 即可下载。
+访问 http://novels.freelycode.com/ 即可下载。
 
 欢迎试用，有问题再改进～～
 
