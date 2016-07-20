@@ -92,6 +92,9 @@ def search(request):
                 book_id = book.book_id
             except Exception as e:
                 print('save book info error: %s ' % e)
+                mycontext['nobook'] = False
+                return render_to_response('novel/search_result.html', context=mycontext,
+                                          context_instance=RequestContext(request))
         # print(book_url)
         mycontext.update({'bookname': bookname})
         mycontext.update({'book_author': book_author})
