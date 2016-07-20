@@ -1,51 +1,53 @@
 {% extends "novel/base.html" %}
-{% block search %}
-<div class="jumbotron">
-<div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <!--热门小说-->
+{% block index %}
+{#  <div class="jumbotron">#}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <!--热门小说-->
+            </div>
+            <div class="col-md-6">
+                &nbsp;
+                &nbsp;
+                <br>
+                <br>
+                <br>
+{#                <p class="bg-primary">竭诚为你找小说...</p>#}
+                &nbsp;
+                <br>
+                <br>
+                <br>
+            </div>
+            <div class="col-md-3">
+                <!--热门网站-->
+            </div>
         </div>
-        <div class="col-md-6">
-            &nbsp;
-            &nbsp;
-            <br>
-            <br>
-            <br>
-            <p class="bg-primary">竭诚为你找小说...</p>
-            <br>
-            <br>
-            <br>
-        </div>
-        <div class="col-md-3">
-            <!--热门网站-->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            &nbsp;
-        </div>
-        <div class="col-md-6">
-            <form action="/search/" method="get">
-                <div class="input-group">
-                    <input type="text" name="bookname" class="form-control" placeholder="搜你想要的">
+        <div class="row">
+            <div class="col-md-3">
+                &nbsp;
+            </div>
+            <div class="col-md-6">
+                <form action="/search/" method="get">
+                    <div class="input-group">
+                        <input type="text" name="bookname" class="form-control" placeholder="搜你想要的">
+                        <!--<input type="submit" value="Search">-->
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="submit" value="Search"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </form>
+                <!--<form action="/search/" method="get">-->
+                    <!--<input type="text" name="bookname">-->
                     <!--<input type="submit" value="Search">-->
-                    <span class="input-group-btn">
-                        <button class="btn btn-info" type="submit" value="Search"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
-                </div>
-            </form>
-            <!--<form action="/search/" method="get">-->
-                <!--<input type="text" name="bookname">-->
-                <!--<input type="submit" value="Search">-->
-            <!--</form>-->
+                <!--</form>-->
+            </div>
+            <div class="col-md-3">
+                &nbsp;
+            </div>
         </div>
-        <div class="col-md-3">
-            &nbsp;
-        </div>
+        {% block content %}
+        {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
-</div>
-</div>
+{#  </div>#}
+
 {% endblock %}

@@ -5,21 +5,31 @@
             &nbsp;
         </div>
         <div class="col-md-6">
-            <p class="bg-success">你在找: <strong>{{ bookname }}</strong></p>
+{#            <p class="bg-success">你在找: <strong>{{ bookname }}</strong></p>#}
 
-            {% if results %}
-                <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->
-                <ul>
-                    {% for r in results %}
-                        <a href="{{ r.1 }}">{{ r.0 }}</a><li>尝试阅读<a href="{% url 'download' r.2 %}">点击下载</a></li>
-                        <br>
-                        <br>
-                    {% endfor %}
-                </ul>
-            {% else %}
+            {% if bookname %}
+{#                <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->#}
+                <div class="col-md-5 well row">
+                    <img class="col-md-9" width="120" height="150" style="max-width: 120px; max-height: 150px;" alt="" src="{{ book_img }}" border="0">
+                    <div class="col-md-3">
+                        <p><a href="{% url 'book_index' book_id %}"><strong>{{ bookname }}</strong></a></p>
+{#                        <p  class="text-primary">{{ book_desc }}</p>#}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    &nbsp;
+                </div>
+                <div class="col-md-5">
+                    <p  class="text-primary">{{ book_desc }}</p>
+                </div>
+                {% elif not nobook %}
                 <p class="bg-warning">抱歉,没搜到你想要的小说...</p>
             {% endif %}
-            <a href="/">再找一本... </a>
+            {% if nobook %}
+                <p class="bg-warning">请输入小说关键字...</p>
+            {% endif %}
+        </div>
+{#            <a href="/">再找一本... </a>#}
         </div>
         <div class="col-md-3">
             &nbsp;

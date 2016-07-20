@@ -10,6 +10,9 @@ from urllib.parse import urlencode
 import requests
 from bs4 import BeautifulSoup
 
+# from .models import BookType, Book
+
+
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:46.0) Gecko/20100101 Firefox/46.0'}
 # this_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 this_dir = os.getcwd()
@@ -155,3 +158,26 @@ def downloadbook(booknumber):
 # f = open('xxx.txt', 'w')
 # for content in downloadbook('28966'):
 #     f.write(content+'\n')
+
+# 获取百度排行榜小说书名
+
+
+def get_top_baidu_bookname():
+    all = 'http://top.baidu.com/buzz?b=7&c=10&fr=topbuzz_b355_c10'
+    xuanhuanqihuan = 'http://top.baidu.com/buzz?b=353&c=10&fr=topbuzz_b7_c10'
+    dushiyanqing = 'http://top.baidu.com/buzz?b=355&c=10&fr=topbuzz_b353_c10'
+    chuanyuejiakong = 'http://top.baidu.com/buzz?b=1509&c=10&fr=topbuzz_b459_c10'
+    # 先找这四项
+    for url in (all, xuanhuanqihuan, dushiyanqing, chuanyuejiakong):
+        try:
+            _get = requests.get(all, headers=header)
+            soup = BeautifulSoup(_get.content.decode('gbk', 'ignore'), "html.parser")
+            for tr in soup.find_all('tr'):
+                print(tr.text)
+
+            time.sleep(1)
+        except Exception as e:
+            print(e)
+            continue
+
+# get_top_baidu_bookname()

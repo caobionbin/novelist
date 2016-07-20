@@ -1,0 +1,46 @@
+{% extends "novel/base.html" %}
+{% block index %}
+
+
+<div class="container">
+    <h2>&nbsp;</h2>
+    <h2 align="center">{{ book.book_name }}</h2>
+
+    <div class="pull-right">
+        <ul class="nav nav-pills">
+          <li class="dropdown">
+            <a class="dropdown-toggle" aria-expanded="false" style="cursor:pointer" data-toggle="dropdown">
+              功能 <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a style="cursor:pointer" onclick="update()">更新</a></li>
+              <li><a style="cursor:pointer" onclick="change()">换源</a></li>
+              <li class="divider"></li>
+              <li style="background:red;"><a style="cursor:pointer" onclick="del()">删除!</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    <div class="well row">
+      <img class="col-md-4"  width="120" height="150"  style="max-width: 120px; max-height: 150px;" alt="" src="{{ book.book_img }}" border="0">
+      <div class="col-md-8">
+        <p><strong> {{ book.book_desc }} </strong></p>
+        <p class="text-muted">
+          <span>作者：</span><span id="author">{{ book.book_author }}</span><span> | </span>
+          <span>分类：</span><span id="category">{{ book.book_tag }}</span><span> | </span>
+          <span>状态：</span><span id="status">连载</span><span> | </span>
+          <span>更新时间：</span><span id="update">{{ book.book_add_time }}</span><span> | </span>
+          <span>来源：</span><span><a  id="resource" href="#">{{ book.book_website }}</a></span><span> | </span>
+        </p>
+      </div>
+    </div>
+
+    <div class="list-group row">
+        {% for chapter in chapters %}
+            <a class="list-group-item col-lg-4" id="chapterlist" href="{% url 'chapter' book.book_id chapter.chapter_num %}">{{ chapter.chapter_name }}</a>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

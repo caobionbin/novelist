@@ -1,0 +1,23 @@
+{% extends "novel/base.html" %}
+{% block index %}
+    <div class="container" id="resText">
+        <ul class="breadcrumb">
+          <li><a href="{% url 'book_index' book_id %}">{{ bookname }}</a></li>
+          <li class="active">{{ chapter_name }}</li>
+        </ul>
+
+        <div class="well well-lg center-block" id="text">
+          <h1 align="center">{{ chapter_name }}</h1>
+          <p><br /><br />{{ chapter_content|escape }}</p>
+          <ul class="pager">
+          {% if previous_chapter_num %}
+          <li class="previous">
+          <a href="{% url 'chapter' book_id previous_chapter_num %}">&larr; 上一章</a></li>
+          {% endif %}
+          {% if next_chapter_num %}
+            <li class="next"><a href="{% url 'chapter' book_id next_chapter_num %}">下一章 &rarr;</a></li>
+          {% endif %}
+          </ul>
+        </div>
+      </div>
+{% endblock %}

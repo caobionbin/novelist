@@ -6,19 +6,23 @@ import os.path
 
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, StreamingHttpResponse
+from django.template import RequestContext
 
-from .models import SearchHistory
+from .models import SearchHistory, BookType, Book, BookChapter
 from .findbookinbaidu import findbook, getbook, downloadbook
+from .fetch_novel import Search_By_ID, Get_Novel_Info, Save_Content, Get_ID, get_chapter_content, escape
 # Create your views here.
 
 
 def index(request):
-    # return render_to_response('novel/search.html')
-    return redirect('http://www.xs111.com/')
+    return render_to_response('novel/search.html')
+    # return redirect('http://www.xs111.com/')
 
 
 def search(request):
 
+    # print(Get_ID())
+    mycontext = {}
     if 'bookname' in request.GET and request.GET['bookname']:
         bookname = request.GET['bookname']
         if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -27,11 +31,143 @@ def search(request):
             ip = request.META['REMOTE_ADDR']
         searchhistory = SearchHistory(bookname=bookname, ip=ip)
         searchhistory.save()
-        results = findbook(bookname)
-        # results = findbookinbaidu(bookname)
-        return render_to_response('novel/search_result.html', {'bookname': bookname, 'results': results})
+        noveldata = {}
+        try:
+            book = Book.objects.get(book_name=bookname)
+            book_id = book.book_id
+            bookname = book.book_name
+            book_author = book.book_author
+            book_img = book.book_img
+            book_website = book.book_website
+            book_url = book.book_index_url
+            book_desc = book.book_desc
+            book_tag = book.book_tag
+            try:
+                book_tag = BookType.get(pk=book_tag).book_type_name
+            except:
+                book_tag = '暂无标签'
+        except Book.DoesNotExist:
+            print('本地数据库没找到书籍信息,从web找')
+            for id in Get_ID():
+                novelurl = Search_By_ID(novelname=bookname, id=id)
+                if novelurl == -1 or novelurl == -2:
+                    continue
+                noveldata = Get_Novel_Info(novelurl, id)
+                if noveldata.get('title', '') == bookname:
+                    break
+
+            if novelurl == -1 or novelurl == -2:
+                mycontext['nobook'] = False
+                return render_to_response('novel/search_result.html', context=mycontext,
+                                          context_instance=RequestContext(request))
+
+            print('小说地址%s' % novelurl)
+            for key, value in noveldata.items():
+                print(key+':'+value)
+            booktype = None
+            if 'category' in noveldata.keys():
+                try:
+                    booktype = BookType.objects.get(book_type_name=noveldata['category'])
+                except BookType.DoesNotExist:
+                    booktype = BookType(book_type_name=noveldata['category'])
+                    booktype.save()
+
+            try:
+                bookname = noveldata['title']
+                book_author = noveldata.get('author', '')
+                book_img = noveldata.get('image', '')
+                book_website = noveldata.get('id', '')
+                if 'content_link' in noveldata.keys():
+                    book_url = noveldata['content_link']
+                else:
+                    book_url = noveldata['infolink']
+                book_desc = noveldata.get('description', '暂无简介')
+                book_tag = booktype
+                book = Book(book_name=bookname, book_author=book_author, book_desc=book_desc, book_img=book_img, book_website=book_website,
+                            book_index_url=book_url, book_tag=book_tag)
+                book_tag = noveldata.get('category', '')
+                # print(bookname)
+                book.save()
+                book_id = book.book_id
+            except Exception as e:
+                print('保存书籍信息失败... %s ' % e)
+        # print(book_url)
+        mycontext.update({'bookname': bookname})
+        mycontext.update({'book_author': book_author})
+        mycontext.update({'book_img': book_img})
+        mycontext.update({'book_website': book_website})
+        mycontext.update({'book_url': book_url})
+        if len(book_desc) > 100:
+            book_desc = book_desc[:100] + '...'
+        mycontext.update({'book_desc': book_desc})
+        mycontext.update({'book_tag': book_tag})
+        mycontext.update({'book_id': book_id})
+        return render_to_response('novel/search_result.html', context=mycontext, context_instance=RequestContext(request))
     else:
-        return HttpResponse('输入你想要搜的书名...')
+        mycontext['nobook'] = True
+        return render_to_response('novel/search_result.html', context=mycontext, context_instance=RequestContext(request))
+
+
+def book_index(request, book_id):
+    try:
+        book = Book.objects.get(book_id=book_id)
+        # print(book.book_name, book.book_website, book.book_index_url)
+        noveldata = {}
+        noveldata.update({'id': book.book_website})
+        noveldata.update({'content_link': book.book_index_url})
+        chapters = Save_Content(noveldata=noveldata)
+        for chapter_num, chapter in enumerate(chapters):
+            # print(chapter)
+            chapter_title, chapter_url = chapter
+            try:
+                bookchapter = BookChapter.objects.get(chapter_name=chapter_title)
+            except BookChapter.DoesNotExist:
+                bookchapter = BookChapter(book=book, chapter_name=chapter_title, chapter_url=chapter_url, chapter_num=chapter_num)
+                bookchapter.save()
+        chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
+        return render_to_response('novel/book_index.html', {'book': book, 'chapters': chapters})
+    except Book.DoesNotExist:
+        print('书本不存在')
+        return redirect('/')
+    # except Exception as e:
+    #     print(e)
+    #     print('获取书籍章节信息出错')
+    #     return redirect('/')
+
+
+def chapter(request, book_id, chapter_num):
+    print(book_id, chapter_num)
+    mycontext = {}
+    try:
+        book = Book.objects.get(book_id=book_id)
+        chapter_count = BookChapter.objects.filter(book=book).count()
+        chapter = BookChapter.objects.filter(book=book).get(chapter_num=chapter_num)
+        book_website = book.book_website
+        chapter_name = chapter.chapter_name
+        chapter_url = chapter.chapter_url
+        content = get_chapter_content(chapter_url, book_website)
+        # content
+        # content = escape(content)
+        mycontext.update({'book_id': book.book_id})
+        mycontext.update({'book_name': book.book_name})
+        mycontext.update({'chapter_name': chapter_name})
+        mycontext.update({'chapter_content': content})
+        if int(chapter_num) > 0:
+            mycontext.update({'previous_chapter_num': int(chapter_num)-1})
+        if int(chapter_num) < chapter_count - 1:
+            mycontext.update({'next_chapter_num': int(chapter_num) + 1})
+
+        # print(mycontext['chapter_content'])
+        # book.get_next_by_pk
+        return render_to_response('novel/chapter.html', context=mycontext)
+    except Book.DoesNotExist:
+        return redirect('/')
+    except:
+        mycontext.update({'error': '获取正文失败, 刷新重试..'})
+        return redirect('/book/%s' % book_id)
+    # except Exception as e:
+    #     print(e)
+    #     return redirect('/book/%s'%book_id)
 
 
 def read(request, booknumber):

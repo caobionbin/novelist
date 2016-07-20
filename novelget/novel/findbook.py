@@ -150,5 +150,43 @@ def guandaozhisejie():
             f.write(content + '\n')
 
 
+def gaoshoujimo2():
+    time_start = time.time()
+    url = 'http://www.shumilou.co/gaoshoujimo2'
+    f = open('高手寂寞2.txt', 'w')
+    s = requests.session()
+    HEADER.update({'Host': 'www.shumilou.co'})
+    HEADER.update({'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'})
+    html = s.get(url, headers=HEADER, timeout=10).content.decode('utf8', 'ignore')
+    soup = BeautifulSoup(html, "lxml")
+    ul = soup.find('ul')
+    for a in ul.find_all('a'):
+        u = 'http://www.shumilou.co' + a['href']
+        try:
+            content = s.get(u).content.decode('utf8', 'ignore')
+        except ConnectionError:
+            time.sleep(2)
+            content = s.get(u).content.decode('utf8', 'ignore')
+        except Exception:
+            time.sleep(2)
+            content = s.get(u).content.decode('utf8', 'ignore')
+        _soup = BeautifulSoup(content, "lxml")
+        f.write(_soup.title.text.split('高手寂寞2')[0] + '\n')
+        for p in _soup.find_all('p'):
+            if not p.text.startswith('书迷楼最快更新'):
+                f.write(p.text + '\n')
+        time.sleep(0.2)
+    time_end = time.time()
+    print(time_end-time_start)
+
+
+# 多线程抓取www.shumilou.co小说
+def fetch_shumilou():
+    pass
+
+
 if __name__ == '__main__':
-    guandaozhisejie()
+    try:
+        gaoshoujimo2()
+    except Exception as e:
+        print(e+'...try again')

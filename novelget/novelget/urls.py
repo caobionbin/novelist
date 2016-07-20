@@ -24,7 +24,11 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'novel.views.index', name='index'),
     url(r'^search/', 'novel.views.search', name='search'),
-    url('^read/(\d+)', 'novel.views.read', name='read'),
-    url('^download/(\d+)', 'novel.views.download', name='download'),
+    url(r'^read/(\d+)', 'novel.views.read', name='read'),
+    url(r'^book/(?P<book_id>[0-9]+)/$', 'novel.views.book_index', name='book_index'),
+    url(r'^book/(?P<book_id>[0-9]+)/(?P<chapter_num>[0-9]+)/$', 'novel.views.chapter', name='chapter'),
+    # url(r'^articles/(?P<year>[0-9])/$', views.year_archive),
+    # url(r'^articles/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', views.month_archive),
+    url(r'^download/(\d+)', 'novel.views.download', name='download'),
     url(r'^list/', 'novel.views.list', name='list'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
