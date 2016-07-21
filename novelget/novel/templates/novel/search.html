@@ -5,16 +5,6 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="/">去哪儿找小说</a>
       </div>
-
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="/">书架<span class="glyphicon glyphicon-book"></span></a></li>
-          <li><a href="/search">找小说<span class="glyphicon glyphicon-search"></span></a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right" hidden>
-          <li><a href="/config"><span class="glyphicon glyphicon-cog"></span></a></li>
-        </ul>
-      </div>
       </div>
     </nav>
 {% endblock %}
@@ -32,8 +22,6 @@
                 <br>
                 <br>
                 <br>
-{#                <p class="bg-primary">竭诚为你找小说...</p>#}
-                &nbsp;
                 <br>
                 <br>
                 <br>
@@ -42,26 +30,23 @@
                 <!--热门网站-->
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
+        <div class="well row">
+            <div class="col-md-4">
                 &nbsp;
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+
                 <form action="/search/" method="get">
                     <div class="input-group">
                         <input type="text" name="bookname" class="form-control" placeholder="搜你想要的">
                         <!--<input type="submit" value="Search">-->
                         <span class="input-group-btn">
-                            <button class="btn btn-info" type="submit" value="Search"><span class="glyphicon glyphicon-search"></span></button>
+                            <button class="btn btn-default" type="submit" value="Search"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
                     </div>
                 </form>
-                <!--<form action="/search/" method="get">-->
-                    <!--<input type="text" name="bookname">-->
-                    <!--<input type="submit" value="Search">-->
-                <!--</form>-->
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 &nbsp;
             </div>
         </div>
