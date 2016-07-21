@@ -34,3 +34,4 @@ class BookChapter(models.Model):
     chapter_name = models.CharField(max_length=100, verbose_name='章节名称')
     chapter_url = models.CharField(max_length=200, verbose_name='章节地址')
     chapter_num = models.IntegerField(verbose_name='章节序号')
+    chapter_content_path = models.CharField(max_length=100, verbose_name='内容路径', default='')
