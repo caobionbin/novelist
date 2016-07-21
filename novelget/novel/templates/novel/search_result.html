@@ -27,12 +27,12 @@
         <div class="col-md-6">
 {#            <p class="bg-success">你在找: <strong>{{ bookname }}</strong></p>#}
 
-            {% if bookname %}
+            {% if book %}
 {#                <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->#}
                 <div class="col-md-6">
-                    <a href="{% url 'book_index' book_id %}"><img class="col-md-7"  alt="" src="{{ book_img }}" border="1"></a>
+                    <a href="{% url 'book_index' book.book_id %}"><img class="col-md-7"  alt="" src="{{ book.book_img }}" border="1"></a>
                     <div class="col-md-5">
-                        <p><a href="{% url 'book_index' book_id %}"><strong>{{ bookname }}</strong></a></p>
+                        <p><a href="{% url 'book_index' book.book_id %}"><strong>{{ book.book_name }}</strong></a></p>
 {#                        <p  class="text-primary">{{ book_desc }}</p>#}
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                     &nbsp;
                 </div>
                 <div class="col-md-5">
-                    <p>{{ book_desc }}</p>
+                    <p>{{ book.book_desc|slice:":100" }}...</p>
                 </div>
                 {% elif not nobook %}
                 <p class="bg-warning">抱歉,没搜到你想要的小说...</p>

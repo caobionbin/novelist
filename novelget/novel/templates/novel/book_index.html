@@ -24,22 +24,22 @@
     <h2>&nbsp;</h2>
     <h2 align="center">{{ book.book_name }}</h2>
 
-    <div class="pull-right">
-        <ul class="nav nav-pills">
-            <li><a href="{% url 'download' book.book_id %}">txt下载</a></li>
-          <li class="dropdown" hidden>
-            <a class="dropdown-toggle" aria-expanded="false" style="cursor:pointer" data-toggle="dropdown">
-              功能 <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a style="cursor:pointer" onclick="update()">更新</a></li>
-              <li><a style="cursor:pointer" onclick="change()">换源</a></li>
-              <li class="divider"></li>
-              <li style="background:red;"><a style="cursor:pointer" onclick="del()">删除!</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+{#    <div class="pull-right">#}
+{#        <ul class="nav nav-pills">#}
+{#            <li><a href="{% url 'download' book.book_id %}">txt下载</a></li>#}
+{#          <li class="dropdown" hidden>#}
+{#            <a class="dropdown-toggle" aria-expanded="false" style="cursor:pointer" data-toggle="dropdown">#}
+{#              功能 <span class="caret"></span>#}
+{#            </a>#}
+{#            <ul class="dropdown-menu">#}
+{#              <li><a style="cursor:pointer" onclick="update()">更新</a></li>#}
+{#              <li><a style="cursor:pointer" onclick="change()">换源</a></li>#}
+{#              <li class="divider"></li>#}
+{#              <li style="background:red;"><a style="cursor:pointer" onclick="del()">删除!</a></li>#}
+{#            </ul>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </div>#}
 
     <div class="well row">
       <img class="col-md-4"  width="120" height="150"  style="max-width: 120px; max-height: 150px;" alt="" src="{{ book.book_img }}" border="0">
@@ -47,10 +47,16 @@
         <p><strong> {{ book.book_desc }} </strong></p>
         <p class="text-muted">
           <span>作者：</span><span id="author">{{ book.book_author }}</span><span> | </span>
-          <span>分类：</span><span id="category">{{ book.book_tag }}</span><span> | </span>
+          <span>分类：</span><span id="category">{{ book.book_tag.book_type_name }}</span><span> | </span>
           <span>状态：</span><span id="status">连载</span><span> | </span>
           <span>更新时间：</span><span id="update">{{ book.book_add_time }}</span><span> | </span>
           <span>来源：</span><span><a  id="resource" href="#">{{ book.book_website }}</a></span><span> | </span>
+          <br/>
+          <span>点击低速下载txt:</span>
+          <span><a href="{% url 'download' book.book_id %}">txt下载</a></span>
+          <br/>
+          <span>没有章节或者章节不全请点击:</span>
+          <span><a href="{% url 'update' book.book_id %}">章节更新</a></span>
         </p>
       </div>
     </div>

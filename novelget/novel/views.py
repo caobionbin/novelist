@@ -44,7 +44,7 @@ def search(request):
             book_desc = book.book_desc
             book_tag = book.book_tag
             try:
-                book_tag = BookType.get(pk=book_tag).book_type_name
+                book_tag.book_type_name
             except:
                 book_tag = '暂无标签'
         except Book.DoesNotExist:
@@ -55,15 +55,15 @@ def search(request):
                 if novelurl == -1 or novelurl == -2:
                     continue
                 noveldata = Get_Novel_Info(novelurl, id)
-                if noveldata.get('title', '') == bookname:
+                # print(noveldata)
+                if noveldata.get('title', None):
                     break
-            print(novelurl)
-            if novelurl == -1 or novelurl == -2:
+            # print(novelurl)
+            if novelurl == -1 or novelurl == -2 or not noveldata.get('title', None):
                 mycontext['nobook'] = False
                 return render_to_response('novel/search_result.html', context=mycontext,
                                           context_instance=RequestContext(request))
-
-            print('website: %s' % novelurl)
+            # print('website: %s' % novelurl)
             # for key, value in noveldata.items():
             #     print(key+':'+value)
             booktype = None
@@ -73,7 +73,8 @@ def search(request):
                 except BookType.DoesNotExist:
                     booktype = BookType(book_type_name=noveldata['category'])
                     booktype.save()
-
+                except:
+                    pass
             try:
                 bookname = noveldata['title']
                 book_author = noveldata.get('author', '')
@@ -89,6 +90,7 @@ def search(request):
                             book_index_url=book_url, book_tag=book_tag)
                 book_tag = noveldata.get('category', '')
                 # print(bookname)
+                print(book_img)
                 book.save()
                 book_id = book.book_id
             except Exception as e:
@@ -97,16 +99,7 @@ def search(request):
                 return render_to_response('novel/search_result.html', context=mycontext,
                                           context_instance=RequestContext(request))
         # print(book_url)
-        mycontext.update({'bookname': bookname})
-        mycontext.update({'book_author': book_author})
-        mycontext.update({'book_img': book_img})
-        mycontext.update({'book_website': book_website})
-        mycontext.update({'book_url': book_url})
-        if len(book_desc) > 100:
-            book_desc = book_desc[:100] + '...'
-        mycontext.update({'book_desc': book_desc})
-        mycontext.update({'book_tag': book_tag})
-        mycontext.update({'book_id': book_id})
+        mycontext.update({'book': book})
         return render_to_response('novel/search_result.html', context=mycontext, context_instance=RequestContext(request))
     else:
         mycontext['nobook'] = True
@@ -114,6 +107,21 @@ def search(request):
 
 
 def book_index(request, book_id):
+    try:
+        book = Book.objects.get(book_id=book_id)
+        chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
+        book_type = book.book_tag.book_type_name
+        return render_to_response('novel/book_index.html', {'book': book, 'chapters': chapters, 'book_type': book_type})
+    except Book.DoesNotExist:
+        print('book does not exist')
+        return redirect('/')
+    # except Exception as e:
+    #     print(e)
+    #     print('获取书籍章节信息出错')
+    #     return redirect('/')
+
+
+def update(request, book_id):
     try:
         book = Book.objects.get(book_id=book_id)
         # print(book.book_name, book.book_website, book.book_index_url)
@@ -125,19 +133,14 @@ def book_index(request, book_id):
             # print(chapter)
             chapter_title, chapter_url = chapter
             try:
-                bookchapter = BookChapter.objects.get(chapter_name=chapter_title)
+                bookchapter = BookChapter.objects.filter(book=book).get(chapter_num=chapter_num)
             except BookChapter.DoesNotExist:
                 bookchapter = BookChapter(book=book, chapter_name=chapter_title, chapter_url=chapter_url, chapter_num=chapter_num)
                 bookchapter.save()
-        chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
-        return render_to_response('novel/book_index.html', {'book': book, 'chapters': chapters})
+        return redirect('book_index', book_id=book_id)
     except Book.DoesNotExist:
         print('book does not exist')
         return redirect('/')
-    # except Exception as e:
-    #     print(e)
-    #     print('获取书籍章节信息出错')
-    #     return redirect('/')
 
 
 def chapter(request, book_id, chapter_num):

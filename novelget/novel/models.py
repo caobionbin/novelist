@@ -6,7 +6,7 @@ from django.db import models
 
 
 class SearchHistory(models.Model):
-    bookname = models.CharField(max_length=50, verbose_name='书名')
+    bookname = models.CharField(max_length=100, verbose_name='书名')
     ip = models.CharField(max_length=20, verbose_name='访问ip', blank=True)
     searchtime = models.DateTimeField(auto_now_add=True, verbose_name='搜索时间')
 
@@ -17,9 +17,9 @@ class BookType(models.Model):
 
 class Book(models.Model):
     book_id = models.AutoField(primary_key=True)
-    book_name = models.CharField(max_length=50, verbose_name='书名')
-    book_author = models.CharField(max_length=30, verbose_name='作者', default='暂无作者信息')
-    book_img = models.CharField(max_length=50, verbose_name='封面地址', default='')
+    book_name = models.CharField(max_length=100, verbose_name='书名')
+    book_author = models.CharField(max_length=50, verbose_name='作者', default='暂无作者信息')
+    book_img = models.CharField(max_length=200, verbose_name='封面地址', default='')
     book_desc = models.CharField(max_length=1000, verbose_name='简介', default='')
     book_website = models.CharField(max_length=100, verbose_name='书本来源站点')
     book_index_url = models.CharField(max_length=200, verbose_name='书本主页')
