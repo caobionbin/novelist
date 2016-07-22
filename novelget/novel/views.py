@@ -63,6 +63,19 @@ def search(request):
                 mycontext['nobook'] = False
                 return render_to_response('novel/search_result.html', context=mycontext,
                                           context_instance=RequestContext(request))
+
+            # 如果查询结果的书本名称和查询请求不一致,将重新判断novel_book里是否已经存在该书
+            if bookname != noveldata.get('title', None):
+                try:
+                    book = None
+                    book = Book.objects.filter(book_name=noveldata.get('title', None)).first()
+                except:
+                    pass
+                if book:
+                    mycontext.update({'book': book})
+                    return render_to_response('novel/search_result.html', context=mycontext,
+                                              context_instance=RequestContext(request))
+
             # print('website: %s' % novelurl)
             # for key, value in noveldata.items():
             #     print(key+':'+value)
@@ -132,9 +145,12 @@ def update(request, book_id):
         for chapter_num, chapter in enumerate(chapters):
             # print(chapter)
             chapter_title, chapter_url = chapter
+            bookchapter = None
             try:
-                bookchapter = BookChapter.objects.filter(book=book).get(chapter_num=chapter_num)
-            except BookChapter.DoesNotExist:
+                bookchapter = BookChapter.objects.filter(book=book).filter(chapter_num=chapter_num).first()
+            except:
+                pass
+            if not bookchapter:
                 bookchapter = BookChapter(book=book, chapter_name=chapter_title, chapter_url=chapter_url, chapter_num=chapter_num)
                 bookchapter.save()
         return redirect('book_index', book_id=book_id)
@@ -149,7 +165,7 @@ def chapter(request, book_id, chapter_num):
     try:
         book = Book.objects.get(book_id=book_id)
         chapter_count = BookChapter.objects.filter(book=book).count()
-        chapter = BookChapter.objects.filter(book=book).get(chapter_num=chapter_num)
+        chapter = BookChapter.objects.filter(book=book).filter(chapter_num=chapter_num).first()
         book_website = book.book_website
         chapter_name = chapter.chapter_name
         chapter_url = chapter.chapter_url
@@ -203,11 +219,9 @@ def download(request, book_id):
     return response
 
 
-def list(request):
-
-    path = '/Users/zhangdesheng/Documents/python-learning/zds-git/novelist/novelget/novel/templates/novel'
-    files = []
-    for f in os.listdir(path):
-        if os.path.isfile(os.path.join(path, f)):
-            files.append(f)
-    return render_to_response('novel/listfile.html', {'files': files})
+def toplist(request):
+    if Book.objects.count() < 100:
+        books = Book.objects.all()
+    else:
+        books = Book.objects.all()[99]
+    return render_to_response('novel/toplist.html', {'books': books})

@@ -31,5 +31,5 @@ urlpatterns = [
     # url(r'^articles/(?P<year>[0-9])/$', views.year_archive),
     # url(r'^articles/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/$', views.month_archive),
     url(r'^download/(\d+)', 'novel.views.download', name='download'),
-    url(r'^list/', 'novel.views.list', name='list'),
+    url(r'^toplist/$', 'novel.views.toplist', name='toplist'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

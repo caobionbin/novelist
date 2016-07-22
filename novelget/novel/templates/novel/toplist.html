@@ -1,0 +1,24 @@
+{% extends 'novel/base.html' %}
+{% block nav %}
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">去哪儿找小说</a>
+      </div>
+    </nav>
+{% endblock %}
+{% block index %}
+
+    <div class="container">
+        <h1>&nbsp;</h1>
+    {% for book in books %}
+
+        <div class="row">
+            <p class="col-md-2"><a href="{% url 'book_index' book.book_id %}">{{ book.book_name }}</a></p>
+            <p class="col-md-2"><a href="{% url 'update' book.book_id %}">章节更新</a></p>
+            <p class="col-md-2"><a href="{% url 'download' book.book_id %}">txt下载</a></p>
+            <p class="col-md-6">&nbsp;</p>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
