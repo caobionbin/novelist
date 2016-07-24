@@ -220,8 +220,5 @@ def download(request, book_id):
 
 
 def toplist(request):
-    if Book.objects.count() < 100:
-        books = Book.objects.all()
-    else:
-        books = Book.objects.all()[99]
+    books = Book.objects.filter(book_local_url='Mac')
     return render_to_response('novel/toplist.html', {'books': books})

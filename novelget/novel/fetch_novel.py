@@ -75,12 +75,15 @@ def Get_Novel_Info(url, id='bqg5200'):
         return -1  # 小说页面无法连接
     soup = BeautifulSoup(data, "html.parser")  # 构建BS数据
     # --------------------------------------------------抓取小说信息
+    # print(data)
+    # print(soup)
     noveldata['homepage'] = opts['url']
     noveldata['infolink'] = url
     noveldata['id'] = opts['id']
     noveldata['website'] = opts['name']
-
+    # print(noveldata)
     string = 'soup.' + opts['title']
+    print(string)
     noveldata['title'] = eval(string)
 
     try:
@@ -175,6 +178,15 @@ def Save_Content(noveldata):
         return -1  # 目录页面无法连接
     soup = BeautifulSoup(data, "html.parser")  # 构建BS数据
     # --------------------------------------------------抓取小说章节列表
+    # bqg5200 需要从小说主页获取小说目录页
+    try:
+        url = soup.find(name='a', attrs={'class': 'tgcj'})['href']
+        data = requests.get(url, headers=header).content
+        soup = BeautifulSoup(data, "html.parser")
+    except:
+        print('获取bqg5200章节列表失败...')
+        pass
+
     string = 'soup.' + opts['chapter_list']
     chapters = []
     for chapter_list in eval(string):

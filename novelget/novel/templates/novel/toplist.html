@@ -11,14 +11,30 @@
 
     <div class="container">
         <h1>&nbsp;</h1>
-    {% for book in books %}
-
-        <div class="row">
-            <p class="col-md-2"><a href="{% url 'book_index' book.book_id %}">{{ book.book_name }}</a></p>
-            <p class="col-md-2"><a href="{% url 'update' book.book_id %}">章节更新</a></p>
-            <p class="col-md-2"><a href="{% url 'download' book.book_id %}">txt下载</a></p>
-            <p class="col-md-6">&nbsp;</p>
-        </div>
-    {% endfor %}
+        <center><h2>热门小说列表</h2></center>
+        {% for book in books %}
+            <div class="well row">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-6">
+                        <a href="{% url 'book_index' book.book_id %}"><img class="col-md-7"  alt="" src="{{ book.book_img }}" border="1"></a>
+                        <div class="col-md-5">
+                            <p><a href="{% url 'book_index' book.book_id %}"><strong>{{ book.book_name }}</strong></a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-5">
+                        <p>{{ book.book_desc|slice:":100" }}...</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
