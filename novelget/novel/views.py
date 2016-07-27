@@ -33,8 +33,11 @@ def search(request):
         searchhistory = SearchHistory(bookname=bookname, ip=ip)
         searchhistory.save()
         noveldata = {}
+        book = None
         try:
-            book = Book.objects.get(book_name=bookname)
+            book = Book.objects.filter(book_name=bookname).first()
+            if not book:
+                raise Book.DoesNotExist
             book_id = book.book_id
             bookname = book.book_name
             book_author = book.book_author
@@ -49,6 +52,7 @@ def search(request):
                 book_tag = '暂无标签'
         except Book.DoesNotExist:
             print('cannot find local book, fetch from website')
+            novel_search_result = []
             novelurl = 0
             for id in Get_ID():
                 novelurl = Search_By_ID(novelname=bookname, id=id)
@@ -56,9 +60,18 @@ def search(request):
                     continue
                 noveldata = Get_Novel_Info(novelurl, id)
                 # print(noveldata)
-                if noveldata.get('title', None):
+                novel_search_result.append((novelurl, noveldata))
+                if noveldata.get('title', None) == bookname:
                     break
-            # print(novelurl)
+            for novelurl, noveldata in novel_search_result:
+                if not noveldata.get('title', None):
+                    continue
+                if noveldata.get('title', None) == bookname:
+                    novelurl = novelurl
+                    noveldata = noveldata
+                    break
+                novelurl = novelurl
+                noveldata = noveldata
             if novelurl == -1 or novelurl == -2 or not noveldata.get('title', None):
                 mycontext['nobook'] = False
                 return render_to_response('novel/search_result.html', context=mycontext,
@@ -103,14 +116,20 @@ def search(request):
                             book_index_url=book_url, book_tag=book_tag)
                 book_tag = noveldata.get('category', '')
                 # print(bookname)
-                print(book_img)
+                # print(book_img)
                 book.save()
                 book_id = book.book_id
             except Exception as e:
-                print('save book info error: %s ' % e)
+                print('save book info error')
                 mycontext['nobook'] = False
                 return render_to_response('novel/search_result.html', context=mycontext,
                                           context_instance=RequestContext(request))
+        except Exception as e:
+            print('cannot find the book, failed...')
+            mycontext['nobook'] = True
+            return render_to_response('novel/search_result.html', context=mycontext,
+                                      context_instance=RequestContext(request))
+
         # print(book_url)
         mycontext.update({'book': book})
         return render_to_response('novel/search_result.html', context=mycontext, context_instance=RequestContext(request))
@@ -153,14 +172,14 @@ def update(request, book_id):
             if not bookchapter:
                 bookchapter = BookChapter(book=book, chapter_name=chapter_title, chapter_url=chapter_url, chapter_num=chapter_num)
                 bookchapter.save()
-        return redirect('book_index', book_id=book_id)
     except Book.DoesNotExist:
         print('book does not exist')
-        return redirect('/')
-
+    except:
+        print('fetch book chapters error...')
+    return redirect('book_index', book_id=book_id)
 
 def chapter(request, book_id, chapter_num):
-    print(book_id, chapter_num)
+    # print(book_id, chapter_num)
     mycontext = {}
     try:
         book = Book.objects.get(book_id=book_id)
@@ -205,7 +224,7 @@ def download(request, book_id):
 
     book = Book.objects.get(pk=book_id)
     file_name = book.book_name + '.txt'
-    print(file_name)
+    # print(file_name)
     def downloadbook():
         chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
         for chapter in chapters:
