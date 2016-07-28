@@ -63,7 +63,7 @@
 
     <div class="list-group row">
         {% for chapter in chapters %}
-            <a class="list-group-item col-sm-4" id="chapterlist" href="{% url 'chapter' book.book_id chapter.chapter_num %}">{{ chapter.chapter_name }}</a>
+            <a class="list-group-item col-sm-6" id="chapterlist" href="{% url 'chapter' book.book_id chapter.chapter_num %}">{{ chapter.chapter_name }}</a>
         {% endfor %}
 
     </div>
