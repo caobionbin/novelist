@@ -21,25 +21,25 @@
 {% block content %}
     &nbsp;
     <div class="well row">
-        <div class="col-md-3">
+        <div class="col-sm-3">
             &nbsp;
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6">
 {#            <p class="bg-success">你在找: <strong>{{ bookname }}</strong></p>#}
 
             {% if book %}
 {#                <!--<p>Found {{ books|length }} book{{ books|pluralize }}.</p>-->#}
-                <div class="col-md-6">
-                    <a href="{% url 'book_index' book.book_id %}"><img class="col-md-7"  alt="" src="{{ book.book_img }}" border="1"></a>
-                    <div class="col-md-5">
+                <div class="col-sm-6">
+                    <a href="{% url 'book_index' book.book_id %}"><img class="col-sm-7"  alt="" src="{{ book.book_img }}" border="1"></a>
+                    <div class="col-sm-5">
                         <p><a href="{% url 'book_index' book.book_id %}"><strong>{{ book.book_name }}</strong></a></p>
 {#                        <p  class="text-primary">{{ book_desc }}</p>#}
                     </div>
                 </div>
-                <div class="col-md-1">
+                <div class="col-sm-1">
                     &nbsp;
                 </div>
-                <div class="col-md-5">
+                <div class="col-sm-5">
                     <p>{{ book.book_desc|slice:":100" }}...</p>
                 </div>
                 {% elif not nobook %}
@@ -49,7 +49,7 @@
                 <p class="bg-warning">请输入小说关键字...</p>
             {% endif %}
         </div>
-        <div class="col-md-3">
+        <div class="col-sm-3">
             &nbsp;
         </div>
     </div>

@@ -42,8 +42,8 @@
 {#      </div>#}
 
     <div class="well row">
-      <img class="col-md-4"  width="120" height="150"  style="max-width: 120px; max-height: 150px;" alt="" src="{{ book.book_img }}" border="0">
-      <div class="col-md-8">
+      <img class="col-sm-4"  width="120" height="150"  style="max-width: 120px; max-height: 150px;" alt="" src="{{ book.book_img }}" border="0">
+      <div class="col-sm-8">
         <p><strong> {{ book.book_desc }} </strong></p>
         <p class="text-muted">
           <span>作者：</span><span id="author">{{ book.book_author }}</span><span> | </span>
@@ -63,7 +63,7 @@
 
     <div class="list-group row">
         {% for chapter in chapters %}
-            <a class="list-group-item col-lg-4" id="chapterlist" href="{% url 'chapter' book.book_id chapter.chapter_num %}">{{ chapter.chapter_name }}</a>
+            <a class="list-group-item col-sm-4" id="chapterlist" href="{% url 'chapter' book.book_id chapter.chapter_num %}">{{ chapter.chapter_name }}</a>
         {% endfor %}
 
     </div>
