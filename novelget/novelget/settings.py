@@ -83,8 +83,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'novel',
         'USER': 'novelist',
-        'PASSWORD': 'novelist#',
-        'HOST': '119.29.201.221',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '3306',
         'OPTIONS': {
             'read_default_file': '/tmp/novelist/my.cnf',
