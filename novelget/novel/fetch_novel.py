@@ -15,7 +15,7 @@ DIRDICT = {'novellist': './novel/list.dat', \
            'chapter_link': lambda novelname: './novel/' + novelname + '/chapter_link.dat', \
            'chapter': lambda novelname, index: './novel/' + novelname + '/' + repr(index) + '.txt'}
 CONFIG = ConfigParser()
-this_dir = "/Users/zhangdesheng/Documents/python-learning/zds-git/novelist/novelget/novel"
+this_dir = "/home/zhangdesheng/django/novelist/novelget/novel"
 
 CONFIG.read(os.path.join(this_dir, "config.ini"), encoding='utf8')
 
@@ -184,7 +184,6 @@ def Save_Content(noveldata):
         data = requests.get(url, headers=header).content
         soup = BeautifulSoup(data, "html.parser")
     except:
-        print('获取bqg5200章节列表失败...')
         pass
 
     string = 'soup.' + opts['chapter_list']

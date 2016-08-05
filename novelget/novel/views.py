@@ -142,7 +142,10 @@ def book_index(request, book_id):
     try:
         book = Book.objects.get(book_id=book_id)
         chapters = BookChapter.objects.filter(book=book).order_by('chapter_num')
-        book_type = book.book_tag.book_type_name
+        try:
+            book_type = book.book_tag.book_type_name
+        except:
+            book_type = '暂无分类'
         return render_to_response('novel/book_index.html', {'book': book, 'chapters': chapters, 'book_type': book_type})
     except Book.DoesNotExist:
         print('book does not exist')
@@ -230,7 +233,7 @@ def download(request, book_id):
         for chapter in chapters:
             title = chapter.chapter_name
             content = get_chapter_content(chapter_url=chapter.chapter_url, book_website=book.book_website)
-            yield title + '\n' + content
+            yield title + '\n' + content + '\n'
 
     response = StreamingHttpResponse(downloadbook())
     response['Content-Type'] = 'application/octet-stream'
